@@ -28,6 +28,17 @@ const kvSet = (k, v) => tx("readwrite", s => s.put(v, k));
 const kvDel = k => tx("readwrite", s => s.delete(k));
 const kvKeys = () => tx("readonly", s => s.getAllKeys());
 
+// confirmação em dois toques (confirm() não funciona em páginas incorporadas)
+function arm(btn, fn) {
+  const label = btn.textContent;
+  let t;
+  btn.onclick = () => {
+    if (btn.dataset.armed) { clearTimeout(t); delete btn.dataset.armed; btn.textContent = label; fn(); return; }
+    btn.dataset.armed = "1"; btn.textContent = "Toque de novo";
+    t = setTimeout(() => { delete btn.dataset.armed; btn.textContent = label; }, 3000);
+  };
+}
+
 const urls = new Map();
 const objUrl = (key, blob) => {
   if (urls.has(key)) URL.revokeObjectURL(urls.get(key));
@@ -91,7 +102,9 @@ function sceneEl(s) {
   );
   if (has) {
     acts.append(el("button", { textContent: "🎨 Pintar", onclick: () => openPainter(s.id) }));
-    acts.append(el("button", { className: "ghost", textContent: "Remover", onclick: () => removeImage(s.id) }));
+    const rm = el("button", { className: "ghost", textContent: "Remover" });
+    arm(rm, () => removeImage(s.id));
+    acts.append(rm);
   }
   const head = el("h3", {}, `${s.id.startsWith("f") ? "" : s.id + " "}${s.title}`);
   if (has) head.append(el("span", { className: "badge", textContent: "✓ gerada" }));
@@ -116,7 +129,6 @@ $("#file").onchange = async e => {
 };
 
 async function removeImage(id) {
-  if (!confirm("Remover a imagem e a pintura desta página?")) return;
   await kvDel("img:" + id); await kvDel("color:" + id);
   await refresh();
 }
@@ -145,8 +157,8 @@ document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
   if (b.dataset.tab === "gallery") renderGallery();
 });
 $("#search").oninput = renderPrompts;
-$("#useNeg").checked = localStorage.getItem("useNeg") === "1";
-$("#useNeg").onchange = () => { localStorage.setItem("useNeg", $("#useNeg").checked ? "1" : "0"); renderPrompts(); };
+try { $("#useNeg").checked = localStorage.getItem("useNeg") === "1"; } catch {}
+$("#useNeg").onchange = () => { try { localStorage.setItem("useNeg", $("#useNeg").checked ? "1" : "0"); } catch {} renderPrompts(); };
 $("#copyBlocks").onclick = () => copy(Object.entries(B.blocks).map(([k, v]) => `${k}\n${v}`).join("\n\n"));
 $("#importFree").onclick = () => pick("free");
 
@@ -282,13 +294,16 @@ function persist() {
 }
 
 $("#pUndo").onclick = () => { const s = P.undo.pop(); if (s) { cx.putImageData(s, 0, 0); persist(); } };
-$("#pClear").onclick = () => { if (confirm("Apagar toda a pintura desta página?")) { snapshot(); cx.fillStyle = "#fff"; cx.fillRect(0, 0, P.w, P.h); persist(); } };
+arm($("#pClear"), () => { snapshot(); cx.fillStyle = "#fff"; cx.fillRect(0, 0, P.w, P.h); persist(); });
 $("#pSave").onclick = () => {
   const out = el("canvas", { width: P.w, height: P.h }), o = out.getContext("2d");
   o.drawImage(cc, 0, 0); o.drawImage(cl, 0, 0);
   out.toBlob(b => {
-    const a = el("a", { href: URL.createObjectURL(b), download: `pintura-${P.id.replace(/\W+/g, "_")}.png` });
-    a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    const u = URL.createObjectURL(b);
+    const ov = el("div", { className: "saveov", onclick: () => { ov.remove(); URL.revokeObjectURL(u); } },
+      el("p", { textContent: "Segure a imagem (ou clique com o botão direito) para salvar. Toque fora para fechar." }),
+      el("img", { src: u, alt: "Pintura pronta" }));
+    document.body.append(ov);
   });
 };
 $("#pBack").onclick = async () => {
@@ -299,4 +314,4 @@ $("#pBack").onclick = async () => {
 };
 
 refresh();
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+if ("serviceWorker" in navigator && location.protocol.startsWith("http") && !window.claude) navigator.serviceWorker.register("sw.js").catch(() => {});

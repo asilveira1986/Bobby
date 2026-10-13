@@ -1,12 +1,13 @@
 :root{--bg:#fff8f0;--card:#fff;--ink:#3a2e2a;--mute:#8a7b73;--acc:#ff7a59;--acc2:#ffd166;--line:#f0e2d4}
-@media (prefers-color-scheme:dark){:root{--bg:#1f1a18;--card:#2b2421;--ink:#f6ece4;--mute:#b3a399;--line:#3b312c}}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#1f1a18;--card:#2b2421;--ink:#f6ece4;--mute:#b3a399;--line:#3b312c;color-scheme:dark}}
+:root[data-theme=dark]{--bg:#1f1a18;--card:#2b2421;--ink:#f6ece4;--mute:#b3a399;--line:#3b312c;color-scheme:dark}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
 button,input,textarea{font:inherit;color:inherit}
 button{background:var(--acc);color:#fff;border:0;border-radius:12px;padding:9px 14px;cursor:pointer;font-weight:600}
 button.ghost{background:transparent;color:var(--acc);border:2px solid var(--acc)}
 button:disabled{opacity:.4}
-.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 16px 0;border-bottom:1px solid var(--line)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:10px 16px 0;border-bottom:1px solid var(--line)}
 .top h1{margin:0 0 8px;font-size:20px}
 .tabs{display:flex;gap:6px}
 .tabs button{background:transparent;color:var(--mute);border-radius:12px 12px 0 0;border-bottom:3px solid transparent}
@@ -52,3 +53,5 @@ details.ch>summary .cnt{color:var(--mute);font-weight:500}
 .sw.on{box-shadow:0 0 0 3px var(--acc)}
 input[type=color].sw{appearance:none;-webkit-appearance:none;background:conic-gradient(red,yellow,lime,aqua,blue,magenta,red)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#000c;color:#fff;border-radius:999px;padding:8px 16px;z-index:50;font-size:14px}
+.saveov{position:fixed;inset:0;z-index:40;background:#000d;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;color:#fff;text-align:center}
+.saveov img{max-width:100%;max-height:75vh;background:#fff;border-radius:8px}
