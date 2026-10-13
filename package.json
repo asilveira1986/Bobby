@@ -1,0 +1,10 @@
+{
+  "name": "livro-de-colorir-familia",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Estúdio de prompts e pintura digital do Livro de Colorir da Família",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "build:data": "python3 tools/build-data.py"
+  }
+}
