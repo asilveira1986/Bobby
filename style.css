@@ -1,0 +1,54 @@
+:root{--bg:#fff8f0;--card:#fff;--ink:#3a2e2a;--mute:#8a7b73;--acc:#ff7a59;--acc2:#ffd166;--line:#f0e2d4}
+@media (prefers-color-scheme:dark){:root{--bg:#1f1a18;--card:#2b2421;--ink:#f6ece4;--mute:#b3a399;--line:#3b312c}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,textarea{font:inherit;color:inherit}
+button{background:var(--acc);color:#fff;border:0;border-radius:12px;padding:9px 14px;cursor:pointer;font-weight:600}
+button.ghost{background:transparent;color:var(--acc);border:2px solid var(--acc)}
+button:disabled{opacity:.4}
+.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 16px 0;border-bottom:1px solid var(--line)}
+.top h1{margin:0 0 8px;font-size:20px}
+.tabs{display:flex;gap:6px}
+.tabs button{background:transparent;color:var(--mute);border-radius:12px 12px 0 0;border-bottom:3px solid transparent}
+.tabs button.on{color:var(--acc);border-bottom-color:var(--acc)}
+main{max-width:900px;margin:0 auto;padding:12px 16px 80px}
+.tab{display:none}.tab.on{display:block}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0}
+#search{flex:1;min-width:180px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--card)}
+.chk{font-size:14px;color:var(--mute);display:flex;gap:6px;align-items:center}
+.progress{font-size:14px;color:var(--mute);margin:4px 0 10px}
+.hint{color:var(--mute);font-size:14px}
+details.ch{margin:10px 0;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+details.ch>summary{padding:14px;font-weight:700;cursor:pointer;display:flex;justify-content:space-between;gap:8px}
+details.ch>summary .cnt{color:var(--mute);font-weight:500}
+.scene{border-top:1px solid var(--line);padding:12px 14px}
+.scene h3{margin:0 0 6px;font-size:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.badge{font-size:12px;background:var(--acc2);color:#5a4300;border-radius:999px;padding:2px 8px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.chip{font-size:12px;background:var(--line);border-radius:999px;padding:2px 9px}
+.scene textarea{width:100%;min-height:110px;border-radius:10px;border:1px solid var(--line);background:var(--bg);padding:8px;font-size:13px;resize:vertical}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.thumb{width:64px;height:64px;object-fit:cover;border-radius:10px;border:1px solid var(--line);background:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:10px}
+.gcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px;cursor:pointer;text-align:center}
+.gcard img{width:100%;aspect-ratio:1;object-fit:contain;background:#fff;border-radius:10px}
+.gcard small{display:block;margin-top:4px;color:var(--mute)}
+.painter{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;flex-direction:column}
+.painter[hidden]{display:none}
+.ptop{display:flex;gap:6px;align-items:center;padding:8px 10px;padding-top:max(8px,env(safe-area-inset-top));overflow-x:auto}
+.ptop button{padding:7px 10px;white-space:nowrap}
+.ptop strong{white-space:nowrap;font-size:14px}
+.sp{flex:1}
+.stage{flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:6px;background:#e9e1d8}
+.wrap{position:relative;touch-action:none;box-shadow:0 2px 14px #0003;background:#fff;max-width:100%;max-height:100%}
+.wrap canvas{display:block;max-width:100%;max-height:calc(100vh - 210px)}
+#cLine{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.ptools{padding:8px 10px;padding-bottom:max(8px,env(safe-area-inset-bottom));border-top:1px solid var(--line)}
+.modes{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.modes button{background:var(--line);color:var(--ink);padding:7px 10px}
+.modes button.on{background:var(--acc);color:#fff}
+.palette{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.sw{flex:0 0 auto;width:38px;height:38px;border-radius:50%;border:3px solid var(--card);box-shadow:0 0 0 1px #0004;padding:0}
+.sw.on{box-shadow:0 0 0 3px var(--acc)}
+input[type=color].sw{appearance:none;-webkit-appearance:none;background:conic-gradient(red,yellow,lime,aqua,blue,magenta,red)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#000c;color:#fff;border-radius:999px;padding:8px 16px;z-index:50;font-size:14px}
